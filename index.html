@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .box {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background: #2f7a57;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #e8f1eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Restaurant App</h1>
+        <button onclick="loadData('orders')">Orders</button>
+        <button onclick="loadData('payments')">Payments</button>
+        <button onclick="loadData('menu')">Menu</button>
+        <h2 id="title">Orders</h2>
+        <div id="output">Loading...</div>
+    </div>
+
+    <script>
+        const title = document.getElementById("title");
+        const output = document.getElementById("output");
+
+        const columns = {
+            orders: ["order_id", "order_date", "items", "quantity", "order_total"],
+            payments: ["payment_id", "order_id", "payment_date", "payment_type", "amount_due", "tips", "discount", "total_paid", "payment_status"],
+            menu: ["item_id", "item_name", "category_name", "menu_name", "size", "price"]
+        };
+
+        function loadData(type) {
+            title.textContent = type;
+            output.innerHTML = "Loading...";
+
+            fetch("/" + type)
+                .then(response => response.json())
+                .then(data => data.error ? output.innerHTML = data.error : showTable(type, data))
+                .catch(() => output.innerHTML = "Error loading data");
+        }
+
+        function showTable(type, data) {
+            if (!data.length) {
+                output.innerHTML = "No data found";
+                return;
+            }
+
+            let html = "<table><tr>";
+
+            for (let column of columns[type]) {
+                html += "<th>" + column + "</th>";
+            }
+
+            html += "</tr>";
+
+            for (let row of data) {
+                html += "<tr>";
+                for (let column of columns[type]) {
+                    html += "<td>" + row[column] + "</td>";
+                }
+                html += "</tr>";
+            }
+
+            output.innerHTML = html + "</table>";
+        }
+
+        loadData("orders");
+    </script>
+</body>
+</html>
