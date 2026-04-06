@@ -95,7 +95,7 @@
             for (let row of data) {
                 html += "<tr>";
                 for (let column of columns[type]) {
-                    html += "<td>" + row[column] + "</td>";
+                    html += "<td>" + (row[column] == null ? "" : row[column]) + "</td>";
                 }
                 html += "</tr>";
             }
