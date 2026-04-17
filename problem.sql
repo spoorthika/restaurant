@@ -23,6 +23,11 @@ CREATE TABLE payments (
     payment_status VARCHAR(20)
 );
 
+CREATE TABLE menus (
+    menu_id INT PRIMARY KEY,
+    menu_name VARCHAR(50)
+);
+
 CREATE TABLE categories (
     cat_id INT PRIMARY KEY,
     category_name VARCHAR(50),
